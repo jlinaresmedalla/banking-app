@@ -1,3 +1,47 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": ["eslint:recommended", "next", "prettier"],
+  "plugins": ["react", "import", "jsx-a11y", "@typescript-eslint", "prettier"],
+  "ignorePatterns": ["next.config.mjs", "tailwind.config.js", "postcss.config.js"],
+  "rules": {
+    "react/jsx-filename-extension": ["error", { "extensions": [".tsx"] }],
+    "prettier/prettier": ["warn"],
+    "react/prop-types": 0,
+    "react/react-in-jsx-scope": 0,
+    "@typescript-eslint/no-empty-function": 0,
+    "react/jsx-uses-react": 0,
+    "react/jsx-no-target-blank": 0,
+    "import/no-unresolved": 0,
+    "react-hooks/exhaustive-deps": 0,
+    "import/named": 0
+  },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2022,
+    "sourceType": "module",
+    "project": "tsconfig.json",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "env": {
+    "es6": true,
+    "browser": true,
+    "node": true
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    },
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts", ".tsx"]
+    },
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      },
+      "typescript": {
+        "alwaysTryTypes": true
+      }
+    }
+  }
 }
