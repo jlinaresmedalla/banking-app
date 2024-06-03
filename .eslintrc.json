@@ -1,7 +1,7 @@
 {
   "extends": ["eslint:recommended", "next", "prettier"],
   "plugins": ["react", "import", "jsx-a11y", "@typescript-eslint", "prettier"],
-  "ignorePatterns": ["next.config.mjs", "tailwind.config.js", "postcss.config.js"],
+  "ignorePatterns": ["next.config.mjs", "tailwind.config.js", "postcss.config.mjs"],
   "rules": {
     "react/jsx-filename-extension": ["error", { "extensions": [".tsx"] }],
     "prettier/prettier": ["warn"],
@@ -12,7 +12,8 @@
     "react/jsx-no-target-blank": 0,
     "import/no-unresolved": 0,
     "react-hooks/exhaustive-deps": 0,
-    "import/named": 0
+    "import/named": 0,
+    "no-undef": 0
   },
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
