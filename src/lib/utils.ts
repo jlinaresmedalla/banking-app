@@ -89,6 +89,7 @@ export function formUrlQuery({ params, key, value }: UrlQueryParams) {
   );
 }
 
+// eslint-disable-next-line no-undef
 export function getAccountTypeColors(type: AccountTypes) {
   switch (type) {
     case 'depository':
@@ -117,6 +118,7 @@ export function getAccountTypeColors(type: AccountTypes) {
   }
 }
 
+// eslint-disable-next-line no-undef
 export function countTransactionCategories(transactions: Transaction[]): CategoryCount[] {
   const categoryCounts: { [category: string]: number } = {};
   let totalCount = 0;
@@ -140,6 +142,7 @@ export function countTransactionCategories(transactions: Transaction[]): Categor
     });
 
   // Convert the categoryCounts object to an array of objects
+  // eslint-disable-next-line no-undef
   const aggregatedCategories: CategoryCount[] = Object.keys(categoryCounts).map((category) => ({
     name: category,
     count: categoryCounts[category],

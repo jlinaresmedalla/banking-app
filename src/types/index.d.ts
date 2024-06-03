@@ -74,7 +74,6 @@ declare type Transaction = {
   category: string;
   date: string;
   image: string;
-  type: string;
   $createdAt: string;
   channel: string;
   senderBankId: string;
@@ -188,6 +187,7 @@ declare interface AuthFormProps {
 
 declare interface BankDropdownProps {
   accounts: Account[];
+  // eslint-disable-next-line no-undef
   setValue?: UseFormSetValue<any>;
   otherStyles?: string;
 }
