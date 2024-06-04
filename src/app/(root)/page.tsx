@@ -3,7 +3,7 @@ import RightSidebar from '@/components/RightSideBar';
 import TotalBalanceBox from '@/components/TotalBalance';
 
 const Home = () => {
-  const loggedIn = { firstName: 'Juan' };
+  const loggedIn = { firstName: 'Juan', lastName: 'Linares', email: 'jlinaresmedalla@gmail.com' };
 
   return (
     <section className="home">
@@ -19,7 +19,11 @@ const Home = () => {
         </header>
         RECENT TRANSACTIONS
       </div>
-      <RightSidebar user={loggedIn} transactions={[]} banks={[]} />
+      <RightSidebar
+        user={loggedIn}
+        transactions={[]}
+        banks={[{ currentBalance: 125 }, { currentBalance: 580 }]}
+      />
     </section>
   );
 };
