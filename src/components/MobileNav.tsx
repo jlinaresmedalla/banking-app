@@ -6,8 +6,6 @@ import { usePathname } from 'next/navigation';
 import { Sheet, SheetClose, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { sidebarLinks } from '@/constants';
 import { cn } from '@/lib/utils';
-import Hamburger from '../public/icons/hamburger.svg';
-import logo from '../public/icons/logo.svg';
 
 const MobileNav = ({ user }: MobileNavProps) => {
   const pathName = usePathname();
@@ -16,11 +14,17 @@ const MobileNav = ({ user }: MobileNavProps) => {
     <section className="w-full !max-w-[264px]">
       <Sheet>
         <SheetTrigger>
-          <Image src={Hamburger} width={30} height={30} alt="menu" className="cursor-pointer" />
+          <Image
+            src={'/icons/hamburger.svg'}
+            width={30}
+            height={30}
+            alt="menu"
+            className="cursor-pointer"
+          />
         </SheetTrigger>
         <SheetContent side={'left'} className="border-none bg-white">
           <Link href="/" className="flex cursor-pointer items-center gap-1 px-4">
-            <Image src={logo} width={34} height={34} alt="logo" />
+            <Image src={'/icons/logo.svg'} width={34} height={34} alt="logo" />
             <h1 className="text-26 font-ibm-plex-serif font-bold text-black-1">WiseBank</h1>
           </Link>
           <div className="mobilenav-sheet">

@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { sidebarLinks } from '@/constants';
 import { cn } from '@/lib/utils';
-import logo from '../public/icons/logo.svg';
 
 const Sidebar = ({ user }: SiderbarProps) => {
   const pathName = usePathname();
@@ -15,7 +14,7 @@ const Sidebar = ({ user }: SiderbarProps) => {
       <nav className="flex flex-col gap-4">
         <Link href="/" className="flex mb-12 cursor-pointer items-center gap-2">
           <Image
-            src={logo}
+            src={'/icons/logo.svg'}
             width={34}
             height={34}
             alt="logo"
