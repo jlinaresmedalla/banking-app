@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { Loader2 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { z } from 'zod';
@@ -13,6 +14,7 @@ import Custominput from './CustomInput';
 
 const AuthForm = ({ type }: { type: string }) => {
   const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<z.infer<typeof authFormSchema>>({
     defaultValues: {
@@ -25,7 +27,9 @@ const AuthForm = ({ type }: { type: string }) => {
   const onSubmit = (values: z.infer<typeof authFormSchema>) => {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
+    setIsLoading(true);
     console.log(values);
+    setIsLoading(false);
   };
 
   return (
@@ -61,8 +65,16 @@ const AuthForm = ({ type }: { type: string }) => {
               label={'Password'}
               placeholder={'Enter your password'}
             />
-            <Button type="submit" className="form-btn">
-              Submit
+            <Button type="submit" className="form-btn" disabled={isLoading}>
+              {isLoading ? (
+                <>
+                  <Loader2 size={20} className="animate-spin" /> &nbsp; Loading...
+                </>
+              ) : type === 'sign-in' ? (
+                'Sign In'
+              ) : (
+                'Sign Up'
+              )}
             </Button>
           </form>
         </Form>
