@@ -31,7 +31,7 @@ const AuthForm = ({ type }: { type: string }) => {
       city: '',
       state: '',
       postalCode: '',
-      birthDate: '',
+      dateOfBirth: '',
       ssn: '',
     },
     resolver: zodResolver(formSchema),
@@ -126,7 +126,7 @@ const AuthForm = ({ type }: { type: string }) => {
                   <div className="flex gap-4">
                     <Custominput
                       control={form.control}
-                      name="birthDate"
+                      name="dateOfBirth"
                       label={'Date of Birth'}
                       placeholder={'yyy-mm-dd'}
                     />
