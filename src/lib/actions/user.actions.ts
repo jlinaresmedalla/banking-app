@@ -5,9 +5,12 @@ import { ID } from 'node-appwrite';
 import { createAdminClient, createSessionClient } from '../server/appwrite';
 import { parseStringify } from '../utils';
 
-export const signIn = async ({ email, password }) => {
+export const signIn = async ({ email, password }: signInProps) => {
   try {
-    //Mutation / Database call / API call
+    const { account } = await createAdminClient();
+    const response = await account.createEmailPasswordSession(email, password);
+
+    return parseStringify(response);
   } catch (err) {
     console.log(err);
   }
@@ -50,3 +53,13 @@ export async function getLoggedInUser() {
     return null;
   }
 }
+
+export const logoutAccount = async () => {
+  try {
+    const { account } = await createSessionClient();
+    cookies().delete('appwrite-session');
+    await account.deleteSession('current');
+  } catch (error) {
+    console.log(error);
+  }
+};
