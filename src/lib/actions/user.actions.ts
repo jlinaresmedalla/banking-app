@@ -12,6 +12,10 @@ import {
 import { createAdminClient, createSessionClient } from '../server/appwrite';
 import { plaidClient } from '../server/plaid';
 import { encryptId, parseStringify } from '../utils';
+import { addFundingSource } from './dwola.actions';
+
+const { APPWRITE_DATABASE_ID, APPWRITE_USER_COLLECTION_ID, APPWRITE_BANK_COLLECTION_ID } =
+  process.env;
 
 export const signIn = async ({ email, password }: signInProps) => {
   try {
@@ -90,6 +94,29 @@ export const createLinkToken = async (user: User) => {
     const response = await plaidClient.linkTokenCreate(tokenParams);
 
     return parseStringify({ linkToken: response.data.link_token, response });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const createBankAccount = async ({
+  userId,
+  bankId,
+  accountId,
+  accessToken,
+  fundingSourceUrl,
+  sharableId,
+}: createBankAccountProps) => {
+  try {
+    const { database } = await createAdminClient();
+    const bankAccount = await database.createDocument(
+      APPWRITE_DATABASE_ID!,
+      APPWRITE_BANK_COLLECTION_ID!,
+      ID.unique(),
+      { userId, bankId, accountId, accessToken, fundingSourceUrl, sharableId },
+    );
+
+    return parseStringify(bankAccount);
   } catch (error) {
     console.log(error);
   }
