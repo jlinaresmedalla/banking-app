@@ -50,7 +50,19 @@ const AuthForm = ({ type }: { type: string }) => {
         response && router.push('/');
       }
       if (type === 'sign-up') {
-        const newUser = await signUp(values);
+        const userData = {
+          email: values.email,
+          password: values.password,
+          firstName: values.firstName!,
+          lastName: values.lastName!,
+          address1: values.address1!,
+          city: values.city!,
+          state: values.state!,
+          postalCode: values.postalCode!,
+          dateOfBirth: values.dateOfBirth!,
+          ssn: values.ssn!,
+        };
+        const newUser = await signUp(userData);
         setUser(newUser);
       }
     } catch (err) {

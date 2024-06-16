@@ -11,8 +11,8 @@ import {
 } from 'plaid';
 import { createAdminClient, createSessionClient } from '../server/appwrite';
 import { plaidClient } from '../server/plaid';
-import { encryptId, parseStringify } from '../utils';
-import { addFundingSource } from './dwola.actions';
+import { encryptId, extractCustomerIdFromUrl, parseStringify } from '../utils';
+import { addFundingSource, createDwollaCustomer } from './dwola.actions';
 
 const { APPWRITE_DATABASE_ID, APPWRITE_USER_COLLECTION_ID, APPWRITE_BANK_COLLECTION_ID } =
   process.env;
@@ -34,19 +34,38 @@ export const signIn = async ({ email, password }: signInProps) => {
   }
 };
 
-export const signUp = async (userData: SignUpParams) => {
-  const { email, password, firstName, lastName } = userData;
+export const signUp = async ({ password, ...userData }: SignUpParams) => {
+  const { email, firstName, lastName } = userData;
+  let newUserAccount;
 
   try {
-    const { account } = await createAdminClient();
+    const { account, database } = await createAdminClient();
 
-    const newUserAccount = await account.create(
-      ID.unique(),
-      email,
-      password,
-      `${firstName} ${lastName}`,
-    );
+    newUserAccount = await account.create(ID.unique(), email, password, `${firstName} ${lastName}`);
     const session = await account.createEmailPasswordSession(email, password);
+
+    if (!newUserAccount) throw Error('Failed to create user account');
+
+    const dwollaCustomerUrl = await createDwollaCustomer({
+      ...userData,
+      type: 'personal',
+    });
+
+    if (!dwollaCustomerUrl) throw Error('Failed to create Dwolla customer');
+
+    const dwollaCustomerId = extractCustomerIdFromUrl(dwollaCustomerUrl);
+
+    const newUser = await database.createDocument(
+      APPWRITE_DATABASE_ID!,
+      APPWRITE_USER_COLLECTION_ID!,
+      ID.unique(),
+      {
+        ...userData,
+        userId: newUserAccount.$id,
+        dwollaCustomerId,
+        dwollaCustomerUrl,
+      },
+    );
 
     cookies().set('appwrite-session', session.secret, {
       path: '/',
@@ -55,7 +74,7 @@ export const signUp = async (userData: SignUpParams) => {
       secure: true,
     });
 
-    return parseStringify(newUserAccount);
+    return parseStringify(newUser);
   } catch (err) {
     console.log(err);
   }
@@ -86,7 +105,7 @@ export const createLinkToken = async (user: User) => {
   try {
     const tokenParams = {
       user: { client_user_id: user.$id },
-      client_name: user.name,
+      client_name: `${user.firstName} ${user.lastName}`,
       products: ['auth'] as Products[],
       country_codes: ['US'] as CountryCode[],
       language: 'en',
