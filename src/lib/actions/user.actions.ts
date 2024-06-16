@@ -30,7 +30,7 @@ export const signIn = async ({ email, password }: signInProps) => {
     });
     return parseStringify(session);
   } catch (err) {
-    console.log(err);
+    console.log(err, 'signIn');
   }
 };
 
@@ -42,7 +42,6 @@ export const signUp = async ({ password, ...userData }: SignUpParams) => {
     const { account, database } = await createAdminClient();
 
     newUserAccount = await account.create(ID.unique(), email, password, `${firstName} ${lastName}`);
-    const session = await account.createEmailPasswordSession(email, password);
 
     if (!newUserAccount) throw Error('Failed to create user account');
 
@@ -67,6 +66,7 @@ export const signUp = async ({ password, ...userData }: SignUpParams) => {
       },
     );
 
+    const session = await account.createEmailPasswordSession(email, password);
     cookies().set('appwrite-session', session.secret, {
       path: '/',
       httpOnly: true,
@@ -76,7 +76,7 @@ export const signUp = async ({ password, ...userData }: SignUpParams) => {
 
     return parseStringify(newUser);
   } catch (err) {
-    console.log(err);
+    console.log(err, 'signUp');
   }
 };
 
@@ -97,7 +97,7 @@ export const logoutAccount = async () => {
     cookies().delete('appwrite-session');
     await account.deleteSession('current');
   } catch (error) {
-    console.log(error);
+    console.log(error, 'logoutAccount');
   }
 };
 
@@ -112,9 +112,9 @@ export const createLinkToken = async (user: User) => {
     };
     const response = await plaidClient.linkTokenCreate(tokenParams);
 
-    return parseStringify({ linkToken: response.data.link_token, response });
+    return parseStringify({ linkToken: response.data.link_token });
   } catch (error) {
-    console.log(error);
+    console.log(error, 'createLinkToken');
   }
 };
 
@@ -137,7 +137,7 @@ export const createBankAccount = async ({
 
     return parseStringify(bankAccount);
   } catch (error) {
-    console.log(error);
+    console.log(error, 'createBankAccount');
   }
 };
 
@@ -186,6 +186,6 @@ export const exchangePublicToken = async ({ publicToken, user }: exchangePublicT
 
     return parseStringify({ publicTokenExchange: 'complete' });
   } catch (error) {
-    console.log(error);
+    console.log(error, 'exchangePublicToken');
   }
 };
